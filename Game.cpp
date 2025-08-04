@@ -90,7 +90,7 @@ void Game::update(float deltaTime)
 			resetBall(1);
 			
 		}
-		else if (mBallObject->mPosition.x < 0)
+		else if ((mBallObject->mPosition.x + mBallObject->mSize.x) < 0)
 		{
 			mSecondPlayerScore++;
 			resetBall(2);

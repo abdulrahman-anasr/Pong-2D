@@ -19,10 +19,12 @@
 
 enum GameState {
 	STATE_MENU,
+	STATE_TWO_PLAYER_OPTION,
 	STATE_PICK,
 	STATE_PLAY,
 	STATE_FINISH
 };
+
 
 class Game {
 public:
@@ -38,6 +40,8 @@ public:
 	PaddleObject* mPaddles[2];
 	BallObject* mBallObject;
 
+	std::vector<glm::vec2> mBallPositionsPredictions;
+
 	int mFirstPlayerScore;
 
 	int mSecondPlayerScore;
@@ -47,6 +51,10 @@ public:
 	int mGameMaxScore;
 
 	int mMenuSelectedOption;
+
+	bool mPause;
+
+	bool mTwoPlayerGame;
 
 	void init();
 
@@ -62,6 +70,8 @@ public:
 	void checkCollisions();
 
 	void resetBall(int roundWinner);
+
+	void predictTrajectory(BallObject& ball , bool serve = false);
 
 
 };

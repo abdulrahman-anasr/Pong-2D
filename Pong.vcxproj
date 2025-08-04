@@ -34,6 +34,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="ObjectRenderer.cpp" />
+    <ClCompile Include="PaddleObject.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />

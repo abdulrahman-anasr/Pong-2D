@@ -10,10 +10,10 @@ extern GLFWwindow* window;
 typedef std::tuple<bool, float> Collision;
 
 const glm::vec2 PLAYER_SIZE(20.0f, 130.0f);
-const glm::vec2 PLAYER_VELOCITY(0.0f, 800.0f);
+const glm::vec2 PLAYER_VELOCITY(0.0f, 1200.0f);
 
 const glm::vec2 BALL_SIZE(20.0f, 20.0f);
-const glm::vec2 BALL_VELOCITY(-400.0f, -450.0f);
+const glm::vec2 BALL_VELOCITY(-700.0f, -450.0f);
 
 Collision checkCollision(PaddleObject& paddle, BallObject& ball)
 {
@@ -42,7 +42,7 @@ Collision checkCollision(PaddleObject& paddle, BallObject& ball)
 Game::Game(unsigned int width, unsigned int height) :
 	mWidth(width), mHeight(height), mKeys(), mKeysProcessed(), mState(STATE_MENU),
 	mFirstPlayerScore(0) , mSecondPlayerScore(0) , mGameWinner(-1) , mMenuSelectedOption(0) , mGameMaxScore(0) ,
-	mBallObject(nullptr)
+	mBallObject(nullptr) , mPause(false) , mTwoPlayerGame(false)
 {
 }
 
@@ -65,17 +65,27 @@ void Game::init()
 
 void Game::update(float deltaTime)
 {
-	if (mState == STATE_PLAY)
+	if (mState == STATE_PLAY && !mPause)
 	{
+
+		
 		glm::vec2 ballVelocity = mBallObject->mVelocity * deltaTime;
 
 
 		mBallObject->mPosition += ballVelocity;
 
+		if (!mTwoPlayerGame)
+		{
+			mPaddles[1]->moveTowardsTarget(deltaTime, mHeight);
+		}
+		
+
 		if (mBallObject->mPosition.x > (mWidth - mBallObject->mSize.x))
 		{
 			mFirstPlayerScore++;
+			mBallPositionsPredictions.clear();
 			resetBall(1);
+			
 		}
 		else if (mBallObject->mPosition.x < 0)
 		{
@@ -92,6 +102,7 @@ void Game::update(float deltaTime)
 void Game::checkCollisions()
 {
 
+	bool collidedWithFirstPaddle = false;
 	float strength = 2.5f;
 
 	glm::vec2 oldVelocity = mBallObject->mVelocity;
@@ -113,7 +124,7 @@ void Game::checkCollisions()
 		Collision firstPaddleBallCollision = checkCollision(*mPaddles[0], *mBallObject);
 		if (std::get<0>(firstPaddleBallCollision))
 		{
-
+			collidedWithFirstPaddle = true;
 			float paddleCenter = mPaddles[0]->mPosition.y + mPaddles[0]->mSize.y / 2.0f;
 			float difference = (mBallObject->mPosition.y + (mBallObject->mSize.y / 2.0f)) - paddleCenter;
 
@@ -144,6 +155,15 @@ void Game::checkCollisions()
 			mBallObject->mVelocity.x = -mBallObject->mVelocity.x;
 
 			mBallObject->mPosition.x += std::get<1>(secondPaddleBallCollision);
+
+			
+
+			if (!mTwoPlayerGame)
+			{
+				mBallPositionsPredictions.clear();
+				mPaddles[1]->activateCollisionEffect(mHeight);
+			}
+			
 		}
 	}
 
@@ -169,6 +189,11 @@ void Game::checkCollisions()
 			mBallObject->mVelocity.y = std::abs(BALL_VELOCITY.y) * 2.7f;
 		}
 	}
+
+	if (!mTwoPlayerGame && collidedWithFirstPaddle)
+	{
+		predictTrajectory(*mBallObject);
+	}
 }
 
 void Game::render()
@@ -181,6 +206,16 @@ void Game::render()
 		glm::vec3 quitColor = mMenuSelectedOption == 1 ? glm::vec3(0.0f, 1.0f, 0.0) : glm::vec3(1.0f);
 		textRenderer->renderText("Start", (mWidth / 2.0f) - 120.0f, (mHeight / 2.0f) + 50.0f, 1.0f , startColor);
 		textRenderer->renderText("Quit", (mWidth / 2.0f) - 100.0f, (mHeight / 2.0f) + 150.0f, 1.0f , quitColor);
+	}
+	if (mState == STATE_TWO_PLAYER_OPTION)
+	{
+		textRenderer->renderText("Choose the Match Type", (mWidth / 2.0f) - 500.0f, (mHeight / 2.0f) - 200.0f, 1.0f);
+
+		glm::vec3 aiOption = mMenuSelectedOption == 0 ? glm::vec3(0.0f, 1.0f, 0.0) : glm::vec3(1.0f);
+		glm::vec3 twoPlayerOption = mMenuSelectedOption == 1 ? glm::vec3(0.0f, 1.0f, 0.0) : glm::vec3(1.0f);
+
+		textRenderer->renderText("V.S AI", (mWidth / 2.0f) - 140.0f, (mHeight / 2.0f) + 50.0f, 1.0f, aiOption);
+		textRenderer->renderText("Two Player", (mWidth / 2.0f) - 220.0f, (mHeight / 2.0f) + 150.0f, 1.0f, twoPlayerOption);
 	}
 	if (mState == STATE_PICK)
 	{
@@ -211,10 +246,26 @@ void Game::render()
 			}
 		}
 
+		if (mPause)
+		{
+			textRenderer->renderText("PAUSED", (mWidth / 2) - 200.0f, (mHeight / 2.0f) - 150.0f, 1.5);
+		}
+
 		mPaddles[0]->draw(*renderer);
 		mPaddles[1]->draw(*renderer);
 
 		mBallObject->draw(*renderer);
+
+
+		//FOR DEBUGGING PURPOSES
+		/*if (!mTwoPlayerGame)
+		{
+			for (glm::vec2& positionsPredicted : mBallPositionsPredictions)
+			{
+				renderer->draw(positionsPredicted, glm::vec2(8.0f, 8.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			}
+		}
+		*/
 
 		std::string firstScore = std::to_string(mFirstPlayerScore);
 		std::string secondScore = std::to_string(mSecondPlayerScore);
@@ -273,6 +324,11 @@ void Game::resetBall(int roundWinner)
 			mBallObject->mVelocity.y = -mBallObject->mVelocity.y;
 		}
 	}
+
+	if (roundWinner == 1 && !mTwoPlayerGame)
+	{
+		predictTrajectory(*mBallObject , true);
+	}
 }
 void Game::processInput(float deltaTime)
 {
@@ -300,7 +356,7 @@ void Game::processInput(float deltaTime)
 		{
 			if (mMenuSelectedOption == 0)
 			{
-				mState = STATE_PICK;
+				mState = STATE_TWO_PLAYER_OPTION;
 				mMenuSelectedOption = 0;
 				mKeysProcessed[GLFW_KEY_ENTER] = true;
 			}
@@ -309,6 +365,39 @@ void Game::processInput(float deltaTime)
 				glfwSetWindowShouldClose(window, true);
 			}
 
+		}
+	}
+	if (mState == STATE_TWO_PLAYER_OPTION)
+	{
+		if (mKeys[GLFW_KEY_W] && !mKeysProcessed[GLFW_KEY_W])
+		{
+			mMenuSelectedOption = (mMenuSelectedOption + 1) % 2;
+			mKeysProcessed[GLFW_KEY_W] = true;
+		}
+		if (mKeys[GLFW_KEY_S] && !mKeysProcessed[GLFW_KEY_S])
+		{
+			if (mMenuSelectedOption > 0)
+			{
+				mMenuSelectedOption--;
+			}
+			else
+			{
+				mMenuSelectedOption = 1;
+			}
+			mKeysProcessed[GLFW_KEY_S] = true;
+		}
+		if (mKeys[GLFW_KEY_ENTER] && !mKeysProcessed[GLFW_KEY_ENTER])
+		{
+			if (mMenuSelectedOption == 0)
+			{
+				mTwoPlayerGame = false;
+			}
+			else
+			{
+				mTwoPlayerGame = true;
+			}
+			mState = STATE_PICK;
+			mKeysProcessed[GLFW_KEY_ENTER] = true;
 		}
 	}
 	if (mState == STATE_PICK)
@@ -364,29 +453,37 @@ void Game::processInput(float deltaTime)
 				mPaddles[0]->mPosition.y += firstPlayerVelocity;
 			}
 		}
-
-		if (mKeys[GLFW_KEY_UP])
+		if (mTwoPlayerGame)
 		{
-			if (mPaddles[1]->mPosition.y < 0.0f)
+			if (mKeys[GLFW_KEY_UP])
 			{
-				mPaddles[1]->mPosition.y = 0.0f;
+				if (mPaddles[1]->mPosition.y < 0.0f)
+				{
+					mPaddles[1]->mPosition.y = 0.0f;
+				}
+				else
+				{
+					mPaddles[1]->mPosition.y -= secondPlayerVelocity;
+				}
 			}
-			else
+
+			if (mKeys[GLFW_KEY_DOWN])
 			{
-				mPaddles[1]->mPosition.y -= secondPlayerVelocity;
+				if (mPaddles[1]->mPosition.y > mHeight - mPaddles[1]->mSize.y)
+				{
+					mPaddles[1]->mPosition.y = mHeight - mPaddles[1]->mSize.y;
+				}
+				else
+				{
+					mPaddles[1]->mPosition.y += secondPlayerVelocity;
+				}
 			}
 		}
 
-		if (mKeys[GLFW_KEY_DOWN])
+		if (mKeys[GLFW_KEY_P] && !mKeysProcessed[GLFW_KEY_P])
 		{
-			if (mPaddles[1]->mPosition.y > mHeight - mPaddles[1]->mSize.y)
-			{
-				mPaddles[1]->mPosition.y = mHeight - mPaddles[1]->mSize.y;
-			}
-			else
-			{
-				mPaddles[1]->mPosition.y += secondPlayerVelocity;
-			}
+			mPause = !mPause;
+			mKeysProcessed[GLFW_KEY_P] = true;
 		}
 	}
 	if (mState == STATE_FINISH)
@@ -413,7 +510,6 @@ void Game::processInput(float deltaTime)
 			mKeysProcessed[GLFW_KEY_ENTER] = true;
 			if (mMenuSelectedOption == 0)
 			{
-				mState = STATE_PLAY;
 				startGame();
 			}
 			else if (mMenuSelectedOption == 1)
@@ -439,9 +535,45 @@ void Game::startGame()
 	mFirstPlayerScore = 0;
 	mSecondPlayerScore = 0;
 	mPaddles[0] = new PaddleObject(PLAYER_SIZE, PLAYER_VELOCITY, glm::vec2(0.0f, (mHeight - PLAYER_SIZE.y) / 2), glm::vec3(1.0f));
-	mPaddles[1] = new PaddleObject(PLAYER_SIZE, PLAYER_VELOCITY, glm::vec2(mWidth - PLAYER_SIZE.x, (mHeight - PLAYER_SIZE.y) / 2), glm::vec3(1.0f));
+	mPaddles[1] = new PaddleObject(PLAYER_SIZE, PLAYER_VELOCITY, glm::vec2(mWidth - PLAYER_SIZE.x, (mHeight - PLAYER_SIZE.y) / 2), glm::vec3(1.0f) , !mTwoPlayerGame);
 
 	mBallObject = new BallObject(BALL_SIZE, BALL_VELOCITY, glm::vec2(mWidth / 2, mHeight / 2), glm::vec3(1.0f));
 
 	mState = STATE_PLAY;
+}
+
+void Game::predictTrajectory(BallObject& ball , bool serve)
+{
+	glm::vec2 currentBallVelocity = ball.mVelocity;
+	glm::vec2 currentBallPosition = ball.mPosition;
+	glm::vec2 ballSize = ball.mSize;
+
+	float totalTime = 0.0f;
+	float timeInterval = 0.02f;
+	while (((currentBallPosition.x + ballSize.x / 2) + (currentBallVelocity.x * timeInterval) > 0)
+		&& ( ((currentBallPosition.x + ballSize.x / 2) + (currentBallVelocity.x * timeInterval)) < (mWidth) ))
+	{
+		totalTime += timeInterval;
+		currentBallPosition.x += currentBallVelocity.x * timeInterval;
+		currentBallPosition.y += currentBallVelocity.y * timeInterval;
+
+		if (currentBallPosition.y < 0)
+		{
+			currentBallPosition.y = 0;
+			currentBallVelocity.y = -currentBallVelocity.y;
+		}
+		if (currentBallPosition.y > (mHeight - ballSize.y))
+		{
+			currentBallPosition.y = mHeight - ballSize.y;
+			currentBallVelocity.y = -currentBallVelocity.y;
+		}
+
+		mBallPositionsPredictions.push_back(currentBallPosition);
+	}
+
+	if (!mTwoPlayerGame)
+	{
+		glm::vec2 finalPosition = mBallPositionsPredictions[mBallPositionsPredictions.size() - 1];
+		mPaddles[1]->adjustVelocityAndPosition(finalPosition, totalTime , serve);
+	}
 }

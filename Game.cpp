@@ -1,9 +1,12 @@
 #include "Game.h"
-
+#include <irrKlang.h>
+using namespace irrklang;
 
 ResourceManager* instance;
 ObjectRenderer* renderer;
 TextRenderer* textRenderer;
+
+ISoundEngine* soundEngine = createIrrKlangDevice();
 
 extern GLFWwindow* window;
 
@@ -137,6 +140,8 @@ void Game::checkCollisions()
 			mBallObject->mVelocity.x = -mBallObject->mVelocity.x;
 
 			mBallObject->mPosition.x += std::get<1>(firstPaddleBallCollision);
+
+			soundEngine->play2D("audio/hit.mp3");
 		}
 	}
 	else
@@ -156,8 +161,8 @@ void Game::checkCollisions()
 
 			mBallObject->mPosition.x += std::get<1>(secondPaddleBallCollision);
 
-			
 
+			soundEngine->play2D("audio/hit.mp3");
 			if (!mTwoPlayerGame)
 			{
 				mBallPositionsPredictions.clear();
@@ -429,53 +434,56 @@ void Game::processInput(float deltaTime)
 	}
 	if (mState == STATE_PLAY)
 	{
-		float firstPlayerVelocity = mPaddles[0]->mVelocity.y * deltaTime;
-		float secondPlayerVelocity = mPaddles[1]->mVelocity.y * deltaTime;
-		if (mKeys[GLFW_KEY_W])
+		if (!mPause)
 		{
-			if (mPaddles[0]->mPosition.y < 0.0f)
+			float firstPlayerVelocity = mPaddles[0]->mVelocity.y * deltaTime;
+			float secondPlayerVelocity = mPaddles[1]->mVelocity.y * deltaTime;
+			if (mKeys[GLFW_KEY_W])
 			{
-				mPaddles[0]->mPosition.y = 0.0f;
-			}
-			else
-			{
-				mPaddles[0]->mPosition.y -= firstPlayerVelocity;
-			}
-		}
-		if (mKeys[GLFW_KEY_S])
-		{
-			if (mPaddles[0]->mPosition.y > mHeight - mPaddles[0]->mSize.y)
-			{
-				mPaddles[0]->mPosition.y = mHeight - mPaddles[0]->mSize.y;
-			}
-			else
-			{
-				mPaddles[0]->mPosition.y += firstPlayerVelocity;
-			}
-		}
-		if (mTwoPlayerGame)
-		{
-			if (mKeys[GLFW_KEY_UP])
-			{
-				if (mPaddles[1]->mPosition.y < 0.0f)
+				if (mPaddles[0]->mPosition.y < 0.0f)
 				{
-					mPaddles[1]->mPosition.y = 0.0f;
+					mPaddles[0]->mPosition.y = 0.0f;
 				}
 				else
 				{
-					mPaddles[1]->mPosition.y -= secondPlayerVelocity;
+					mPaddles[0]->mPosition.y -= firstPlayerVelocity;
 				}
 			}
+			if (mKeys[GLFW_KEY_S])
+			{
+				if (mPaddles[0]->mPosition.y > mHeight - mPaddles[0]->mSize.y)
+				{
+					mPaddles[0]->mPosition.y = mHeight - mPaddles[0]->mSize.y;
+				}
+				else
+				{
+					mPaddles[0]->mPosition.y += firstPlayerVelocity;
+				}
+			}
+			if (mTwoPlayerGame)
+			{
+				if (mKeys[GLFW_KEY_UP])
+				{
+					if (mPaddles[1]->mPosition.y < 0.0f)
+					{
+						mPaddles[1]->mPosition.y = 0.0f;
+					}
+					else
+					{
+						mPaddles[1]->mPosition.y -= secondPlayerVelocity;
+					}
+				}
 
-			if (mKeys[GLFW_KEY_DOWN])
-			{
-				if (mPaddles[1]->mPosition.y > mHeight - mPaddles[1]->mSize.y)
+				if (mKeys[GLFW_KEY_DOWN])
 				{
-					mPaddles[1]->mPosition.y = mHeight - mPaddles[1]->mSize.y;
-				}
-				else
-				{
-					mPaddles[1]->mPosition.y += secondPlayerVelocity;
+					if (mPaddles[1]->mPosition.y > mHeight - mPaddles[1]->mSize.y)
+					{
+						mPaddles[1]->mPosition.y = mHeight - mPaddles[1]->mSize.y;
+					}
+					else
+					{
+						mPaddles[1]->mPosition.y += secondPlayerVelocity;
+					}
 				}
 			}
 		}
@@ -539,6 +547,8 @@ void Game::startGame()
 
 	mBallObject = new BallObject(BALL_SIZE, BALL_VELOCITY, glm::vec2(mWidth / 2, mHeight / 2), glm::vec3(1.0f));
 
+	soundEngine->play2D("audio/main.mp3", true);
+	soundEngine->setSoundVolume(0.3f);
 	mState = STATE_PLAY;
 }
 

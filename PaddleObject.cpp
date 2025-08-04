@@ -30,11 +30,12 @@ void PaddleObject::adjustVelocityAndPosition(glm::vec2 position, float timeTaken
 	bool mistake = false;
 	if (!serve)
 	{
-		mistake = chance(8);
+		mistake = chance(4);
 	}
 
 	if (mistake)
 	{
+		std::cout << "Mistake inbound" << std::endl;
 		int paddleWidth = this->mSize.y;
 		range = paddleWidth * 2 + 1;
 		randomOffset = (rand() % range + (-paddleWidth) );
@@ -109,7 +110,7 @@ void PaddleObject::activateCollisionEffect(float maxHeight)
 
 	float difference = y - this->mPosition.y;
 
-	float movementSpeed = difference * 0.8f;
+	float movementSpeed = difference * 1.35f;
 
 	this->mAiVelocity.y = movementSpeed;
 

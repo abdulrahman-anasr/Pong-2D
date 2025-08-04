@@ -100,20 +100,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\irrKlang\include;C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\irrKlang\lib\Winx64-visualStudio;C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>C:\Program Files\irrKlang\include;C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\Program Files\irrKlang\lib\Winx64-visualStudio;C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>C:\Program Files\irrKlang\include;C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\Program Files\irrKlang\lib\Winx64-visualStudio;C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>C:\Program Files\irrKlang\include;C:\Program Files\freetype-2.13.3\include;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\Program Files\irrKlang\lib\Winx64-visualStudio;C:\Program Files\freetype-2.13.3\objs\x64\Debug;C:\Users\abdel\Desktop\my stuff\Programming &amp; Development\Game Development\Learning\Learn-OpenGL\External Libraries\Assimp\lib;C:\Users\abdel\Documents\libraries\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,7 +126,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetype.lib;assimp-vc143-mtd.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;freetype.lib;assimp-vc143-mtd.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -144,7 +144,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetype.lib;assimp-vc143-mtd.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;freetype.lib;assimp-vc143-mtd.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,7 +158,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetype.lib;assimp-vc143-mtd.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;freetype.lib;assimp-vc143-mtd.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -176,7 +176,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetype.lib;assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;freetype.lib;assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

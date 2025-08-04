@@ -55,11 +55,11 @@ void PaddleObject::adjustVelocityAndPosition(glm::vec2 position, float timeTaken
 		
 		if (mistake)
 		{
-			mAiVelocity.y = distanceNeededToMove / (timeTaken / 7.0f);
+			mAiVelocity.y = distanceNeededToMove / (timeTaken / 3.0f);
 		}
 		else
 		{
-			mAiVelocity.y = distanceNeededToMove / (timeTaken / 9.0f);
+			mAiVelocity.y = distanceNeededToMove / (timeTaken / 4.0f);
 		}
 	}
 }
